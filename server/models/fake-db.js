@@ -50,7 +50,7 @@ class FakeDB {
     }
 
     async cleanDb() {
-        await Rental.d
+        await Rental.deleteMany();
     }
 }
 

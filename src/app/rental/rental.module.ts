@@ -7,6 +7,7 @@ import { RentalListItemComponent } from './rental-list-item/rental-list-item.com
 import { RentalService } from './shared/rental.service';
 import { RentalDetailsComponent } from './rental-details/rental-details.component';
 import { Routes, RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 
 const rentalRoutes: Routes = [
@@ -23,7 +24,9 @@ const rentalRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(rentalRoutes)
+    RouterModule.forChild(rentalRoutes),
+    HttpClientModule
+
   ],
   declarations: [
     RentalComponent,

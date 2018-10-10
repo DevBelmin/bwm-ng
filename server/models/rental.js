@@ -10,7 +10,7 @@ const rentalSchema = new Schema({
     beadrooms: { type: Number},
     shared: { type: Boolean},
     description: { type: String, required: true},
-    dailyRent: { type: Number},
+    dailyRate: { type: Number},
     createdAt: { type: Date, default: Date.now}
 });
 
