@@ -1,8 +1,17 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var config = require('./config/dev');
+const express = require('express');
+const mongoose = require('mongoose');
+const config = require('./config/dev');
+const Rental = require('./models/rental');
+const FakeDb = require('./models/fake-db');
 
-mongoose.connect(config.mongoDbUri, { useNewUrlParser: true });
+mongoose.connect(config.mongoDbUri, { useNewUrlParser: true })
+    .then(() => {
+        let fakeDb = new FakeDb();
+        fakeDb.seedDb();
+    }, 
+    (error) => {
+        console.log('Error occured while trying to connect to the mongo DB', error);
+    });
 
 const PORT = process.env.PORT || 3001;
 
