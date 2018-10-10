@@ -1,4 +1,8 @@
 var express = require('express');
+var mongoose = require('mongoose');
+var config = require('./config/dev');
+
+mongoose.connect(config.mongoDbUri, { useNewUrlParser: true });
 
 const PORT = process.env.PORT || 3001;
 
