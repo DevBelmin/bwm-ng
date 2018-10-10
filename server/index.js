@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('./config/dev');
-const Rental = require('./models/rental');
 const FakeDb = require('./models/fake-db');
+
+const rentalRouts = require('./routes/rentals');
 
 mongoose.connect(config.mongoDbUri, { useNewUrlParser: true })
     .then(() => {
@@ -16,6 +17,8 @@ mongoose.connect(config.mongoDbUri, { useNewUrlParser: true })
 const PORT = process.env.PORT || 3001;
 
 var app = express();
+
+app.use('/api/v1/rentals', rentalRouts);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}`);
