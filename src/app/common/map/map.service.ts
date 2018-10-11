@@ -3,6 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { AgmMap } from '@agm/core';
 
+import { google } from '@google/maps';
+
 @Injectable()
 export class MapService {
 
