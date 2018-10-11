@@ -9,6 +9,8 @@ import { RentalDetailsComponent } from './rental-details/rental-details.componen
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
+import { MapModule } from './../common/map/map/map.module';
+
 
 const rentalRoutes: Routes = [
   {
@@ -25,7 +27,8 @@ const rentalRoutes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(rentalRoutes),
-    HttpClientModule
+    HttpClientModule,
+    MapModule
 
   ],
   declarations: [

@@ -11,7 +11,7 @@ import { AppRouterModule } from './app-router/app-router.module';
   declarations: [
     AppComponent,
     HeaderComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

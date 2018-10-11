@@ -7,7 +7,8 @@
             </div>
             <div class="col-md-6">
               <!-- Will be replaced with map !!!! -->
-              <img src="{{rental.image}}" alt="">
+              <bwm-map
+                [streetAddress] = "rental.street + ', ' + rental.city "></bwm-map>  
             </div>
           </div>
         </div>
