@@ -26,8 +26,8 @@ export class MapComponent implements OnInit {
     this.mapService.codeAddress(this.streetAddress)
       .subscribe((geoCodedAddress) => {
 
-        this.lat = +geoCodedAddress[0].geometry.location.lat();
-        this.lng = +geoCodedAddress[0].geometry.location.lng();
+        this.lat = geoCodedAddress.lat;
+        this.lng = geoCodedAddress.lng;
 
         this.agmMap.latitude = this.lat;
         this.agmMap.longitude = this.lng;
