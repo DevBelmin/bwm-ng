@@ -53,7 +53,6 @@ export class MapService {
 
     return Observable.create((observer: Observer<any>) => {
       if (isCached) {
-        debugger;
         this.getCachedAddress(address, observer);
       }
       else {
