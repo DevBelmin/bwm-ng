@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const Rental = require('./rental');
 const Schema = mongoose.Schema;
-const ObjectId = mongoose.SchemaTypes.ObjectId;
 
 var validateEmail = function(email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

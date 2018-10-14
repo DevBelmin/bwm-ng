@@ -4,6 +4,8 @@ const userController = require('../controllers/auth');
 const { check } = require('express-validator/check');
 
 router.post('', [
+
+    // Request validator middleware
     check('username').not().isEmpty().isString(),
     check('email').not().isEmpty().isString(),
     check('password').not().isEmpty().isString(),
@@ -13,7 +15,7 @@ router.post('', [
     check('username').isLength({ max: 32 }),
     check('password').isLength({ min: 4 }),
     check('password').isLength({ max: 32 }),
-    
+
     check('email').isEmail(),
 
   ],

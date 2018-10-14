@@ -1,19 +1,35 @@
 const User = require('../models/user');
 const { validationResult } = require('express-validator/check');
+const UserService = require('../services/user.service');
 
-exports.auth = function (req, res) {
+var auth = async function (req, res) {
+
+    return res.json({status: 'OK'});
+}
+
+var register = async function (req, res) {
 
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
 
-    const username = req.body.username;
-    const email = req.body.email;
-    const password = req.body.password;
-    const passwordConfirmation = req.body.passwordConfirmation;
+    const { username, password, passwordConfirmation, email } = req.body;
 
     if (password === passwordConfirmation) {
+        
+        const userWithUsername = await UserService.findByUsername(username);
+
+        if (userWithUsername) {
+            return res.status(409).send({message: 'Username is already taken.'});
+        }
+
+        const userWithEmail = await UserService.findByEmail(email);
+
+        if (userWithEmail) {
+            return res.status(409).send({message: 'Email is already taken.'});
+        }
 
         const user = new User({
             username: username,
@@ -23,11 +39,11 @@ exports.auth = function (req, res) {
 
         user.save();
 
-        res.json({ username, email });
+        // successfully created user
+        return res.status(402).send({username, email});
     }
-    else res.status(422);
+    else return res.status(422);
 }
 
-exports.register = function (req, res) {
-
-}
+module.exports.register = register;
+module.exports.auth = auth;
