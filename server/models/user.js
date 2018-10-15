@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
+
+// TODO: Move this to environement config
+const saltRounds = 10;
 
 var validateEmail = function(email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -31,9 +35,18 @@ const userSchema = new Schema({
     rentals: [{type: Schema.Types.ObjectId, ref: 'Rental'}]
 });
 
-// userSchema.path('email').validate(function (email) {
-//     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-//     return emailRegex.test(email.text); // Assuming email has a text attribute
-//  }, 'The e-mail field cannot be empty.')
+userSchema.pre('save', function (next) {
+
+    const user = this;
+
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+    bcrypt.hash(user.password, salt, function(err, hash) {
+        // Store hash in your password DB.
+        user.password = hash;
+        next();
+        //TOOD: Handle errors
+        });
+    });
+});
 
 module.exports = mongoose.model('User', userSchema);

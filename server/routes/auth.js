@@ -3,24 +3,23 @@ const router = express.Router();
 const userController = require('../controllers/auth');
 const { check } = require('express-validator/check');
 
-router.post('', [
+const validationRules = [
+  // Request validator middleware
+  check('username').not().isEmpty().isString(),
+  check('email').not().isEmpty().isString(),
+  check('password').not().isEmpty().isString(),
+  check('passwordConfirmation').not().isEmpty().isString(),
 
-    // Request validator middleware
-    check('username').not().isEmpty().isString(),
-    check('email').not().isEmpty().isString(),
-    check('password').not().isEmpty().isString(),
-    check('passwordConfirmation').not().isEmpty().isString(),
+  check('username').isLength({ min: 4 }),
+  check('username').isLength({ max: 32 }),
+  check('password').isLength({ min: 4 }),
+  check('password').isLength({ max: 32 }),
 
-    check('username').isLength({ min: 4 }),
-    check('username').isLength({ max: 32 }),
-    check('password').isLength({ min: 4 }),
-    check('password').isLength({ max: 32 }),
+  check('email').isEmail(),
+];
 
-    check('email').isEmail(),
+router.post('', validationRules, userController.auth);
 
-  ],
-  userController.auth);
-
-router.post('/register', userController.register);
+router.post('/register', validationRules, userController.register);
 
 module.exports = router;

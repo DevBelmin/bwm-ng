@@ -4,7 +4,7 @@ const UserService = require('../services/user.service');
 
 var auth = async function (req, res) {
 
-    return res.json({status: 'OK'});
+    return await (res.json({status: 'OK'}));
 }
 
 var register = async function (req, res) {
@@ -17,32 +17,32 @@ var register = async function (req, res) {
 
     const { username, password, passwordConfirmation, email } = req.body;
 
-    if (password === passwordConfirmation) {
-        
-        const userWithUsername = await UserService.findByUsername(username);
-
-        if (userWithUsername) {
-            return res.status(409).send({message: 'Username is already taken.'});
-        }
-
-        const userWithEmail = await UserService.findByEmail(email);
-
-        if (userWithEmail) {
-            return res.status(409).send({message: 'Email is already taken.'});
-        }
-
-        const user = new User({
-            username: username,
-            email: email,
-            password: password
-        });
-
-        user.save();
-
-        // successfully created user
-        return res.status(402).send({username, email});
+    if (password !== passwordConfirmation) {
+        return res.status(422).send("Password and Confirmed Password are not matching.");
     }
-    else return res.status(422);
+        
+    const userWithUsername = await UserService.findByUsername(username);
+
+    if (userWithUsername) {
+        return res.status(409).send({message: 'Username is already taken.'});
+    }
+
+    const userWithEmail = await UserService.findByEmail(email);
+
+    if (userWithEmail) {
+        return res.status(409).send({message: 'Email is already taken.'});
+    }
+
+    const user = new User({
+        username: username,
+        email: email,
+        password: password
+    });
+
+    user.save();
+
+    // successfully created user
+    return res.status(402).send({username, email});
 }
 
 module.exports.register = register;
