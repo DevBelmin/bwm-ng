@@ -39,10 +39,14 @@ var register = async function (req, res) {
         password: password
     });
 
-    user.save();
+    user.save(function(err) {
+        if (err) {
+            return res.status(422).json(err);
+        }
 
-    // successfully created user
-    return res.status(402).send({username, email});
+         // successfully created user
+        return res.status(402).send({'registered': true});
+    })
 }
 
 module.exports.register = register;
