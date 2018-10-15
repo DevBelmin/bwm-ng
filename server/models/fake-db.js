@@ -39,31 +39,43 @@ class FakeDB {
 
         this.users = [
             {
-                username: 'Musterman',
+                username: 'Belmin',
                 password: 'Password1!',
-                email: 'musterman@email.com'
+                email: 'sabic.belmin@gmail.com',
+                rentals : []
             }
         ];
     }
 
     pushRentalsToDb() {
+        const user = new User(this.users[0]);
+
         this.rentals.forEach((rental) => {
             const newRental = new Rental(rental);
+            newRental.user = user;
+
+            user.rentals.push(new Rental(newRental));
             newRental.save();
-        })
+        });
+
+        user.save();
     }
 
     pushUsersToDb() {
         this.users.forEach((user)=>{
             const newUser = new User(user);
-            newUser.save();
-        })
+            newUser.save(function(err) {
+                if (err) {
+                    console.log("Error while trying to save the user to the DB.");
+                }
+            });
+        });
     }
 
-    seedDb() {
-        this.cleanDb();
+    async seedDb() {
+        await this.cleanDb();
+        //this.pushUsersToDb();
         this.pushRentalsToDb();
-        this.pushUsersToDb();
     }
 
     async cleanDb() {

@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug1": "node --nolazy --inspect-brk=3001 index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.1",
-    "express-validator": "^5.3.0"
+    "express-validator": "^5.3.0",
+    "jsonwebtoken": "^8.3.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
