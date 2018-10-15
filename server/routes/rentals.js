@@ -10,6 +10,11 @@ router.get('', (req, res) => {
     })
 });
 
+router.get('/secret', UserCtr.authMiddleware, function(req, res) {
+
+    return res.json({secret: true});
+})
+
 router.get('/:id', (req, res) => {
 
     const rentalId = req.params.id;
@@ -21,10 +26,5 @@ router.get('/:id', (req, res) => {
         res.json(foundRental);
     })
 });
-
-router.get('/secret', UserCtr.authMiddleware, function(req, res) {
-
-    return res.json({secret: true});
-})
 
 module.exports = router;
