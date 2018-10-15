@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { RentalModule } from './rental/rental.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -16,7 +17,8 @@ import { AppRouterModule } from './app-router/app-router.module';
   imports: [
     BrowserModule,
     AppRouterModule,
-    RentalModule
+    RentalModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
