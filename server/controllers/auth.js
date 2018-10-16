@@ -20,7 +20,7 @@ exports.auth =  function(req, res) {
         return res.status(422).send({errors: [{title: 'Invalid User!', detail: 'User does not exist'}]});
       }
   
-      if (user.hasSamePassword(password)) {
+      if (user.isPasswordMatch(password)) {
         const token = jwt.sign({
           userId: user.id,
           username: user.username

@@ -1,3 +1,4 @@
+import { AuthModule } from './../auth/auth.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,12 +11,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MapModule } from './../common/map/map/map.module';
+import { AuthGuard } from '../auth/common/auth-guard';
 
 
 const rentalRoutes: Routes = [
   {
     path: 'rentals',
     component: RentalComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', component: RentalListComponent },
       { path: ':rentalId', component: RentalDetailsComponent },
@@ -28,7 +31,8 @@ const rentalRoutes: Routes = [
     CommonModule,
     RouterModule.forChild(rentalRoutes),
     HttpClientModule,
-    MapModule
+    MapModule,
+    AuthModule
 
   ],
   declarations: [
@@ -37,6 +41,6 @@ const rentalRoutes: Routes = [
     RentalListItemComponent,
     RentalDetailsComponent
   ],
-  providers: [RentalService]
+  providers: [RentalService, AuthGuard]
 })
 export class RentalModule { }

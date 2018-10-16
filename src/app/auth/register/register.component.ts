@@ -22,8 +22,6 @@ export class RegisterComponent implements OnInit {
   }
 
   register(form) {
-    // Just for debugging purposes
-    console.log(form);
     this.authService.register(<RegistrationData>this.formData)
       .subscribe(
       (response) => {
@@ -31,11 +29,8 @@ export class RegisterComponent implements OnInit {
         form.reset();
       },
       (errorResponse) => {
-        debugger;
         //TODO: add logging service
         this.errorMessages = errorResponse.error.errors;
-        console.log(errorResponse);
-        console.log(this.errorMessages);
       });
   }
 }

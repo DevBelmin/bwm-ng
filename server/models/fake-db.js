@@ -39,9 +39,9 @@ class FakeDB {
 
         this.users = [
             {
-                username: 'Belmin',
+                username: 'musterman',
                 password: 'Password1!',
-                email: 'sabic.belmin@gmail.com',
+                email: 'musterman@test.com',
                 rentals : []
             }
         ];
