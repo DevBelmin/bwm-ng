@@ -59,6 +59,15 @@
 
           <button [disabled]="registerForm.form.invalid" type="submit" (click)="register(registerForm)" class="btn btn-bwm">Submit</button>
         </form>
+
+        <div *ngIf="errorMessages.length" class="alert alert-danger">
+
+          <div *ngFor="let error of errorMessages">
+              {{error.detail}}
+          </div>
+            
+        </div>
+
       </div>
       <div class="col-md-6 ml-auto">
         <div class="image-container">

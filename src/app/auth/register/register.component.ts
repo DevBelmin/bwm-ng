@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AuthService } from './../common/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { RegistrationData } from '../models/registration-data';
 
 @Component({
   selector: 'bwm-register',
@@ -11,18 +13,29 @@ export class RegisterComponent implements OnInit {
   // @ViewChild('registerForm') registerForm: ElementRef;
   
   private formData = {};
+  private errorMessages = [];
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+
   }
 
-  register = function(form) {
-    // TODO: Send data to the server
-
-    // console.log(this.formData);
-    // console.log(form);
-    form.reset();
+  register(form) {
+    // Just for debugging purposes
+    console.log(form);
+    this.authService.register(<RegistrationData>this.formData)
+      .subscribe(
+      (response) => {
+        console.log(response);
+        form.reset();
+      },
+      (errorResponse) => {
+        debugger;
+        //TODO: add logging service
+        this.errorMessages = errorResponse.error.errors;
+        console.log(errorResponse);
+        console.log(this.errorMessages);
+      });
   }
-
 }

@@ -1,119 +1,101 @@
 var jwt = require('jsonwebtoken');
+const { normalizeErrors } = require('../helpers/mongoose');
 const User = require('../models/user');
 const { validationResult } = require('express-validator/check');
 const config = require('../config/dev')
 
-var auth = function (req, res) {
-
+exports.auth =  function(req, res) {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(422).send("Invalid data");
+  
+    if (!password || !email) {
+      return res.status(422).send({errors: [{title: 'Data missing!', detail: 'Provide email and password!'}]});
     }
-
-    User.findOne({'email': email.toLowerCase().trim()}, function(err, user) {
-        if (err) {
-            return res.status(409).send({message: `An error occured while trying to find user with email: ${email}`, err});
-        }
-
-        if (!user) {
-            return res.status(409).send({message: 'Invalid credentials.'});
-        }
-
-        if (!user.isPasswordMatch(password)) {
-            return res.status(409).send({message: 'Invalid credentials.'});
-        }
-        
-        token = jwt.sign({
-            userId: user._id,
-            email: user.email
-        }, config.SECRET, { expiresIn: config.EXPIRATION });
-
+  
+    User.findOne({email}, function(err, user) {
+      if (err) {
+        return res.status(422).send({errors: normalizeErrors(err.errors)});
+      }
+  
+      if (!user) {
+        return res.status(422).send({errors: [{title: 'Invalid User!', detail: 'User does not exist'}]});
+      }
+  
+      if (user.hasSamePassword(password)) {
+        const token = jwt.sign({
+          userId: user.id,
+          username: user.username
+        }, config.SECRET, { expiresIn: config.EXPIRATION});
+  
         return res.json(token);
-
-    })
-}
-
-var register = function (req, res) {
-
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
-
-    const { username, password, passwordConfirmation, email } = req.body;
-
-    if (password !== passwordConfirmation) {
-        return res.status(422).send("Password and Confirmed Password are not matching.");
-    }
-
-    User.findOne({'email': email.toLowerCase().trim()}, function(err, existingUser) {
-        if (err) {
-            return res.status(409).send({message: `An error occured while trying to find user with email: ${email}`, err});
-        }
-
-        if (existingUser) {
-            return res.status(409).send({message: 'Email is already taken.'});
-        }
-
-        User.findOne({'username': username.toLowerCase().trim()}, function(err, existingUser) {
-            if (err) {
-                return res.status(409).send({message: `An error occured while trying to find user with username: ${username}`, err});
-            }
-    
-            if (existingUser) {
-                return res.status(409).send({message: 'Username is already taken.'});
-            }
-
-            const user = new User({
-                username: username,
-                email: email,
-                password: password
-            });
-        
-            user.save(function(err) {
-                if (err) {
-                    return res.status(422).send(json(err));
-                }
-        
-                 // successfully created user
-                return res.status(402).send({'registered': true});
-            });
-        });
+      } else {
+        return res.status(422).send({errors: [{title: 'Wrong Data!', detail: 'Wrong email or password'}]});
+      }
     });
-}
-
-exports.authMiddleware = function(req, res, next) {
-    const token = req.headers.authorization;
-
-    if (!token) {
-        return res.status(401).send({title: 'Not authorized!', details: 'You need to login to get access!'});
+  }
+  
+  exports.register =  function(req, res) {
+    const { username, email, password, passwordConfirmation } = req.body;
+  
+    if (!password || !email) {
+      return res.status(422).send({errors: [{title: 'Data missing!', detail: 'Provide email and password!'}]});
     }
-
-    const user = parseToken(token);
-
-    User.findById(user.userId, function(err, user) {
-
+  
+    if (password !== passwordConfirmation) {
+      return res.status(422).send({errors: [{title: 'Invalid passsword!', detail: 'Password is not a same as confirmation!'}]});
+    }
+  
+    User.findOne({email}, function(err, existingUser) {
+      if (err) {
+        return res.status(422).send({errors: normalizeErrors(err.errors)});
+      }
+  
+      if (existingUser) {
+        return res.status(422).send({errors: [{title: 'Invalid email!', detail: 'User with this email already exist!'}]});
+      }
+  
+      const user = new User({
+        username,
+        email,
+        password
+      });
+  
+      user.save(function(err) {
         if (err) {
-            return res.status(401).send('Error occured while trying to find the user in DB', err);
+          return res.status(422).send({errors: normalizeErrors(err.errors)});
         }
-
-        if (user) {
-            // suggested way by express to store the data for the next midleware
-            res.locals.user = user;
-            next();
-        }
-        else {
-            return res.status(401).send('Error occured while trying to find the user in DB', err);
-        }
+  
+        return res.json({'registered': true});
+      })
     })
-}
-
-function parseToken(token) {
-    // ignoring the first part (BEARER by convention), and extracting just the JWT token
-     return decoded = jwt.verify(token.split(' ')[1], config.SECRET);
-}
-
-module.exports.register = register;
-module.exports.auth = auth;
+  }
+  
+  exports.authMiddleware = function(req, res, next) {
+    const token = req.headers.authorization;
+  
+    if (token) {
+      const user = parseToken(token);
+  
+      User.findById(user.userId, function(err, user) {
+        if (err) {
+          return res.status(422).send({errors: normalizeErrors(err.errors)});
+        }
+  
+        if (user) {
+          res.locals.user = user;
+          next();
+        } else {
+          return notAuthorized(res);
+        }
+      })
+    } else {
+      return notAuthorized(res);
+    }
+  }
+  
+  function parseToken(token) {
+    return jwt.verify(token.split(' ')[1], config.SECRET);
+  }
+  
+  function notAuthorized(res) {
+    return res.status(401).send({errors: [{title: 'Not authorized!', detail: 'You need to login to get access!'}]});
+  }

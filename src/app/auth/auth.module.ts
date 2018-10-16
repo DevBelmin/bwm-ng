@@ -1,3 +1,4 @@
+import { AuthService } from './common/auth.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegisterComponent } from './register/register.component';
@@ -22,6 +23,7 @@ const authRoutes: Routes = [
     FormsModule,
     RouterModule.forChild(authRoutes)
   ],
-  declarations: [RegisterComponent, LoginComponent, AuthComponent]
+  declarations: [RegisterComponent, LoginComponent, AuthComponent],
+  providers: [AuthService]
 })
 export class AuthModule { }
