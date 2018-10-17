@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { TOKEN_NAME } from './auth.service';
 
 @Injectable()
-export class bwmAPIInterceptor implements HttpInterceptor {
+export class TokenInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     const token = localStorage.getItem(TOKEN_NAME);
