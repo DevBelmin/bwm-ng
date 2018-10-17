@@ -1,11 +1,14 @@
+import { AuthGuard } from './auth/common/auth-guard';
+import { AuthModule } from './auth/auth.module';
 import { RentalModule } from './rental/rental.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './common/header/header/header.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppRouterModule } from './app-router/app-router.module';
+import { AuthErrorHandler } from './auth-error-handler';
 
 @NgModule({
   declarations: [
@@ -16,9 +19,16 @@ import { AppRouterModule } from './app-router/app-router.module';
   imports: [
     BrowserModule,
     AppRouterModule,
-    RentalModule
+    RentalModule,
+    AuthModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: ErrorHandler, 
+      useClass: AuthErrorHandler
+    },
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,28 +5,28 @@ const { check } = require('express-validator/check');
 
 router.post('', [
   // Request validator middleware
-  check('email').not().isEmpty().isString(),
-  check('password').not().isEmpty().isString(),
+  check('email', {message: "Invalid email address data"}).not().isEmpty().isString(),
+  check('password', {message: "Invalid password data"}).not().isEmpty().isString(),
 
-  check('password').isLength({ min: 4 }),
-  check('password').isLength({ max: 32 }),
-  check('email').isEmail(),
+  check('password', {message: 'Minimal password length is 4 characters'}).isLength({ min: 4 }),
+  check('password', {message: 'Maximal password length is 32 characters'}).isLength({ max: 32 }),
+  check('email', {message: "Provided email is not a valid email address"}).isEmail(),
   ],
   userController.auth);
 
 router.post('/register', [
   // Request validator middleware
-  check('username').not().isEmpty().isString(),
-  check('email').not().isEmpty().isString(),
-  check('password').not().isEmpty().isString(),
-  check('passwordConfirmation').not().isEmpty().isString(),
+  check('username', {message: "Invalid username data"}).not().isEmpty().isString(),
+  check('email', {message: "Invalid email data"}).not().isEmpty().isString(),
+  check('password', {message: "Invalid password data"}).not().isEmpty().isString(),
+  check('passwordConfirmation', {message: "Invalid confirm password data"}).not().isEmpty().isString(),
 
-  check('username').isLength({ min: 4 }),
-  check('username').isLength({ max: 32 }),
-  check('password').isLength({ min: 4 }),
-  check('password').isLength({ max: 32 }),
+  check('username', {message: "Minimal username length is 4 characters"}).isLength({ min: 4 }),
+  check('username', {message: "Maximal username length is 32 characters"}).isLength({ max: 32 }),
+  check('password', {message: "Maximal password length is 4 characters"}).isLength({ min: 4 }),
+  check('password', {message: "Minimal password length is 32 characters"}).isLength({ max: 32 }),
 
-  check('email').isEmail(),
+  check('email', {message: "Provided email is not a valid email address"}).isEmail(),
   ],
   userController.register);
 
