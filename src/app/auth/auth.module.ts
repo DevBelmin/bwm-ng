@@ -8,6 +8,7 @@ import { AuthComponent } from './auth/auth.component';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { bwmAPIInterceptor } from './common/api-interceptor';
+import { AuthGuard } from './common/auth-guard';
 
 const authRoutes: Routes = [
   {
@@ -16,10 +17,12 @@ const authRoutes: Routes = [
       { 
         path: 'login', 
         component: LoginComponent,
+        canActivate: [AuthGuard]
       },
       { 
         path: 'register', 
-        component: RegisterComponent 
+        component: RegisterComponent,
+        canActivate: [AuthGuard]
       },
     ]
   }

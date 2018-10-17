@@ -1,7 +1,7 @@
 import { AuthService } from './../common/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'bwm-login',
@@ -12,13 +12,25 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   private errorMessages = [];
+  private showRegistrationMessage: boolean;
 
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService, 
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.route.params.subscribe((params) => {
+      if (params['registered'] === 'success') {
+        this.showRegistrationMessage = true;
+      }
+    })
+
     this.initForm();
   }
 

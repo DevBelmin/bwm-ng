@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth/common/auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { RentalModule } from './rental/rental.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -25,7 +26,8 @@ import { AuthErrorHandler } from './auth-error-handler';
     {
       provide: ErrorHandler, 
       useClass: AuthErrorHandler
-    }
+    },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
