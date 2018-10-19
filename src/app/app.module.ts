@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { AuthGuard } from './auth/common/auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { RentalModule } from './rental/rental.module';
@@ -20,7 +21,8 @@ import { AuthErrorHandler } from './auth-error-handler';
     BrowserModule,
     AppRouterModule,
     RentalModule,
-    AuthModule
+    AuthModule,
+    FormsModule
   ],
   providers: [
     {

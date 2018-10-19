@@ -12,7 +12,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MapModule } from './../common/map/map/map.module';
 import { AuthGuard } from '../auth/common/auth-guard';
+import { RentalDetailsBookingComponent } from './rental-details/rental-details-booking/rental-details-booking.component';
 
+import { Daterangepicker } from 'ng2-daterangepicker';
 
 const rentalRoutes: Routes = [
   {
@@ -32,14 +34,16 @@ const rentalRoutes: Routes = [
     RouterModule.forChild(rentalRoutes),
     HttpClientModule,
     MapModule,
-    AuthModule
+    AuthModule,
+    Daterangepicker
 
   ],
   declarations: [
     RentalComponent,
     RentalListComponent,
     RentalListItemComponent,
-    RentalDetailsComponent
+    RentalDetailsComponent,
+    RentalDetailsBookingComponent
   ],
   providers: [RentalService, AuthGuard]
 })

@@ -8,10 +8,9 @@ export class AuthErrorHandler implements ErrorHandler {
 
   handleError(error) {
     const router = this.injector.get(Router);
-    if (error.rejection.status === 401 || error.rejection.status === 403) {
+    if (error.rejection && (error.rejection.status === 401 || error.rejection.status === 403)) {
       router.navigate(['/login']);
     }
-    console.log('In AuthErrorHandler...');
     
     throw error;
   }

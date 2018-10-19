@@ -11,21 +11,38 @@ import { BehaviorSubject } from "rxjs";
 
 export const TOKEN_NAME: string = 'jwt_token';
 
+class DecodedToken {
+  exp: number = 0;
+  username: string ;
+  userId: string;
+}
+
 @Injectable()
 export class AuthService {
 
-  isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isLoginSubject = new BehaviorSubject<boolean>(this.hasToken(TOKEN_NAME));
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  private decodedToken;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
 
-  getToken(): string {
-    return localStorage.getItem(TOKEN_NAME);
+    let token = localStorage.getItem(TOKEN_NAME);
+    if (token) {
+      this.decodedToken = jwt_decode(token);
+    }
+    else {
+      this.decodedToken = new DecodedToken();
+    }
+  }
+
+  getToken(token: string): string {
+    return localStorage.getItem(token);
   }
 
   setToken(token: any): void {
     localStorage.setItem(TOKEN_NAME, token);
+    this.decodedToken = jwt_decode(token);
   }
 
   getTokenExpirationDate(token: string): Date {
@@ -39,7 +56,7 @@ export class AuthService {
   }
 
   isTokenExpired(token?: string): boolean {
-    if (!token) token = this.getToken();
+    if (!token) token = this.getToken(TOKEN_NAME);
     if (!token) return true;
 
     const date = this.getTokenExpirationDate(token);
@@ -73,10 +90,15 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(TOKEN_NAME);
+    this.decodedToken = new DecodedToken();
     this.isLoginSubject.next(false);
   }
 
-  private hasToken() : boolean {
-    return localStorage.getItem(TOKEN_NAME) && !this.isTokenExpired();
+  getUsername(): string {
+    return this.decodedToken.username;
+  }
+
+  private hasToken(token: string) : boolean {
+    return localStorage.getItem(token) && !this.isTokenExpired();
   }
 }
