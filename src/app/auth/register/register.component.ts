@@ -14,17 +14,19 @@ export class RegisterComponent implements OnInit {
   // Just a way to access the template variable from HTML
   // @ViewChild('registerForm') registerForm: ElementRef;
   
-  private formData = {};
-  private errorMessages = [];
+  public formData : RegistrationData;
+  public errorMessages = [];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {
+    this.formData = new RegistrationData('','','','');
+   }
 
   ngOnInit() {
 
   }
 
   register(form) {
-    this.authService.register(<RegistrationData>this.formData)
+    this.authService.register(this.formData)
       .subscribe(
       (response) => {
         form.reset();

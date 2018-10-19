@@ -12,7 +12,7 @@ export class MapComponent implements OnInit {
 
   @ViewChild(AgmMap)
   public agmMap: AgmMap
-  private mapError : boolean = false;
+  public mapError : boolean = false;
 
   @Input() streetAddress: string;
   

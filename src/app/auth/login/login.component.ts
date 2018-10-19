@@ -11,8 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
-  private errorMessages = [];
-  private showRegistrationMessage: boolean;
+  public errorMessages = [];
+  public showRegistrationMessage: boolean;
 
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
