@@ -6,6 +6,7 @@ const FakeDb = require('./models/fake-db');
 
 const rentalRouts = require('./routes/rentals');
 const authRouts = require('./routes/auth');
+const bookingRouts = require('./routes/bookings');
 
 mongoose.connect(config.mongoDbUri, { useNewUrlParser: true })
     .then(() => {
@@ -27,6 +28,7 @@ app.use(bodyParser.json())
 
 app.use('/api/v1/rentals', rentalRouts);
 app.use('/api/v1/auth', authRouts);
+app.use('/api/v1/createBooking', bookingRouts);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}`);

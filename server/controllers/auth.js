@@ -1,7 +1,6 @@
 var jwt = require('jsonwebtoken');
 const { normalizeErrors } = require('../helpers/mongoose');
 const User = require('../models/user');
-const { validationResult } = require('express-validator/check');
 const config = require('../config/dev')
 
 exports.auth =  function(req, res) {
